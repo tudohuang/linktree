@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Linktree</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.20.6/babel.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/js/all.min.js" defer></script>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const links = [
+            { icon: "fa-solid fa-building", title: "TudoTech", description: "查看我的認證專案", url: "https://tudohuang.github.io/tudotech" },
+            { icon: "fas fa-hashtag", title: "RNG", description: "線上賓果", url: "https://tudohuang.github.io/Crazy-randomv2/" },
+            { icon: "fa-solid fa-border-all", title: "SoftwareHub", description: "活動/軟體/網站/框架", url: "https://tudohuang.github.io/SoftaForDev" },
+            { icon: "fa-solid fa-blog", title: "Tudoweb", description: "最初的BLOG", url: "https://tudohuang.github.io/tudoweb" },
+            { icon: "fas fa-globe", title: "個人網站", description: "瀏覽我的作品與部落格", url: "https://tudohuang.github.io/" }
+        ];
+
+        function LinkTree() {
+            const urls = [
+                "tudohuang.github.io",
+                "tudohuang.github.io/tudoweb",
+                "tudohuang.github.io/linktree",
+                "tudohuang.github.io/tudotech",
+                "tudohuang.github.io/Crazy-randomV2",
+                "tudohuang.github.io/SoftaForDev"
+            ];
+
+            const [currentIndex, setCurrentIndex] = React.useState(0);
+            const [showSnake, setShowSnake] = React.useState(false);
+
+            React.useEffect(() => {
+                // 監聽 `console.snake()` 觸發的事件
+                const handleSnakeGame = () => setShowSnake(true);
+                document.addEventListener("startSnakeGame", handleSnakeGame);
+
+                const interval = setInterval(() => {
+                    setCurrentIndex((prevIndex) => (prevIndex + 1) % urls.length);
+                }, 2000);
+
+                return () => {
+                    clearInterval(interval);
+                    document.removeEventListener("startSnakeGame", handleSnakeGame);
+                };
+            }, []);
+
+            return (
+                <div className="flex flex-col items-center justify-center space-y-6 relative">
+                    <h1 className="text-3xl font-bold text-gray-800 dark:text-white transition-all duration-500">
+                        {urls[currentIndex]}
+                    </h1>
+                    <div className="flex flex-col space-y-4">
+                        {links.map((link, index) => (
+                            <a key={index} href={link.url} target="_blank" rel="noopener noreferrer"
+                               className="flex items-center space-x-4 p-4 bg-white dark:bg-gray-800 shadow-lg rounded-2xl 
+                               hover:shadow-xl transition-all w-64">
+                                <i className={`${link.icon} text-blue-500 dark:text-yellow-400 text-2xl`}></i>
+                                <div>
+                                    <h3 className="text-lg font-semibold text-gray-800 dark:text-white">{link.title}</h3>
+                                    <p className="text-sm text-gray-500 dark:text-gray-400">{link.description}</p>
+                                </div>
+                            </a>
+                        ))}
+                    </div>
+                    {showSnake && <SnakeGame onClose={() => setShowSnake(false)} />}
+                </div>
+            );
+        }
+
+(function() {
+    // 🐍 1. Console Snake Game
+    window.console.snake = function () {
+        console.log("%c🐍 貪食蛇啟動！", "color: green; font-size: 16px;");
+        document.dispatchEvent(new Event("startSnakeGame")); // 讓 React 組件知道要啟動
+    };
+
+    // 🍞 2. "sudo make me a sandwich" 梗
+    window.console.sudoMakeMeASandwich = function () {
+        console.log("Okay, here you go! 🥪");
+    };
+    window.console.makeMeASandwich = function () {
+        console.log("You need sudo for that.");
+    };
+
+    // 🐱 3. ASCII 貓
+    window.console.cat = function () {
+        console.log(`
+            /\\_/\\  
+           ( o.o ) 
+            > ^ <
+        `);
+    };
+
+    // 💀 4. "rm -rf /" 梗
+    window.console.rmRf = function () {
+        console.log("%cWARNING: This will erase your entire system! 💀", "color: red; font-size: 18px;");
+        console.log("%c...just kidding. But never run this on a real machine!", "color: gray;");
+    };
+
+    // 💻 5. Ctrl + Shift + K 進入「駭客模式」
+    document.addEventListener("keydown", function (e) {
+        if (e.ctrlKey && e.shiftKey && e.key === "K") {
+            document.body.classList.toggle("hacker-mode");
+            console.log("%cHacker Mode Activated!", "color: green; font-size: 18px;");
+        }
+    });
+
+    // 駭客模式的 CSS
+    const hackerStyle = document.createElement("style");
+    hackerStyle.innerHTML = `
+        .hacker-mode {
+            background: black !important;
+            color: lime !important;
+            font-family: "Courier New", monospace !important;
+        }
+    `;
+    document.head.appendChild(hackerStyle);
+
+    // 🔫 6. DOOM 密技
+    window.console.idkfa = function () {
+        console.log("All weapons unlocked! 🔫💥 (Just kidding)");
+    };
+    window.console.iddqd = function () {
+        console.log("God Mode Activated! 😈");
+    };
+
+    // 🕵️‍♂️ 7. xyzzy - 黑魔法指令
+    window.console.xyzzy = function () {
+        console.log("A hollow voice says: 'Nothing happens.'");
+    };
+
+    // 🚨 8. 開啟 Console 顯示警告
+    setTimeout(() => {
+        console.log("%c⚠️ 警告！這是開發者工具！", "color: red; font-size: 20px; font-weight: bold;");
+        console.log("%c不要在這裡貼上任何代碼，否則你的帳戶可能會被盜！", "color: yellow; font-size: 16px;");
+    }, 1000);
+
+    // 🎶 9. Rickroll 送你去 Rick Astley
+    window.console.rickroll = function () {
+        window.location.href = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
+    };
+
+})();
+
+
+        ReactDOM.render(<LinkTree />, document.getElementById("root"));
+    </script>
+
+    <script>
+        (function() {
+            window.console.snake = function () {
+                console.log("%c🐍 貪食蛇啟動！", "color: green; font-size: 16px;");
+                document.dispatchEvent(new Event("startSnakeGame"));
+            };
+
+            window.console.sudoMakeMeASandwich = function () {
+                console.log("Okay, here you go! 🥪");
+            };
+            window.console.makeMeASandwich = function () {
+                console.log("You need sudo for that.");
+            };
+
+            window.console.cat = function () {
+                console.log(`
+                    /\\_/\\  
+                   ( o.o ) 
+                    > ^ <
+                `);
+            };
+
+            window.console.rmRf = function () {
+                console.log("%cWARNING: This will erase your entire system! 💀", "color: red; font-size: 18px;");
+                console.log("%c...just kidding. But never run this on a real machine!", "color: gray;");
+            };
+
+            document.addEventListener("keydown", function (e) {
+                if (e.ctrlKey && e.shiftKey && e.key === "K") {
+                    document.body.classList.toggle("hacker-mode");
+                    console.log("%cHacker Mode Activated!", "color: green; font-size: 18px;");
+                }
+            });
+
+            const hackerStyle = document.createElement("style");
+            hackerStyle.innerHTML = `
+                .hacker-mode {
+                    background: black !important;
+                    color: lime !important;
+                    font-family: "Courier New", monospace !important;
+                }
+            `;
+            document.head.appendChild(hackerStyle);
+
+            window.console.idkfa = function () {
+                console.log("All weapons unlocked! 🔫💥 (Just kidding)");
+            };
+            window.console.iddqd = function () {
+                console.log("God Mode Activated! 😈");
+            };
+
+            window.console.xyzzy = function () {
+                console.log("A hollow voice says: 'Nothing happens.'");
+            };
+
+            setTimeout(() => {
+                console.log("%c⚠️ 警告！這是開發者工具！", "color: red; font-size: 20px; font-weight: bold;");
+                console.log("%c不要在這裡貼上任何代碼，否則你的帳戶可能會被盜！", "color: yellow; font-size: 16px;");
+            }, 1000);
+
+            window.console.rickroll = function () {
+                window.location.href = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
+            };
+        })();
+    </script>
+</body>
+</html>
